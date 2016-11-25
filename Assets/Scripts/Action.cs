@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Test : MonoBehaviour {
+public class Action : MonoBehaviour {
 
+    
 	// Use this for initialization
 	void Start () {
 	
