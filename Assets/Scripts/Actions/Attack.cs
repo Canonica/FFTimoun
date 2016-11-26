@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Action : MonoBehaviour {
-
-    
+public class Attack : Action {
+    public AttackType.Type attackType;
 	// Use this for initialization
 	void Start () {
 	
