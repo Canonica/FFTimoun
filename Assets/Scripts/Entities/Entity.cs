@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 public class Entity : MonoBehaviour {
 
     public string entityName;
@@ -18,6 +19,8 @@ public class Entity : MonoBehaviour {
     public float magicalResistancePercentage;
 
     public bool hasDoneAction;
+    public Entity currentTarget;
+
 
     protected Archetype.CurrentArchetype archetype;
     protected AttackType.Type attackPreference;
@@ -28,10 +31,26 @@ public class Entity : MonoBehaviour {
         Mana
     }
 
+    public enum Camp
+    {
+        Player, 
+        Enemy
+    }
+
+    public Camp currentCamp;
+
     protected virtual void Start()
     {
         currentLife = maxLife;
         currentMana = maxMana;
+        if(currentCamp == Camp.Player)
+        {
+            CombatManager.instance.playerEntities.Add(this);
+        }
+        else if(currentCamp == Camp.Enemy)
+        {
+            CombatManager.instance.enemyEntities.Add(this);
+        }
     }
 
     public void SubstractCharacteristic(CharacteristicType type, float amount)
