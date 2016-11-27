@@ -4,8 +4,9 @@ using System.Collections;
 public class MagicAttack : Attack {
 
 	// Use this for initialization
-	void Start () {
-        attackType = AttackType.Type.Magic;
+	protected override void Start () {
+        base.Start();
+        _attackType = AttackType.Type.Magic;
     }
 	
 	// Update is called once per frame

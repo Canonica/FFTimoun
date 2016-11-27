@@ -4,8 +4,9 @@ using System.Collections;
 public class PhysicalAttack : Attack {
 
 	// Use this for initialization
-	void Start () {
-        attackType = AttackType.Type.Physical;
+	protected override void Start () {
+        base.Start();
+        _attackType = AttackType.Type.Physical;
 	}
 	
 	// Update is called once per frame

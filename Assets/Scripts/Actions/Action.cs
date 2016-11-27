@@ -3,10 +3,14 @@ using System.Collections;
 
 public class Action : MonoBehaviour {
 
-    public Entity target;
-	// Use this for initialization
-	void Start () {
-	
+    
+   
+    public float amount;
+    protected Entity _target;
+    protected Entity _thisEntity;
+    // Use this for initialization
+    protected virtual void Start () {
+        _thisEntity = GetComponent<Entity>();
 	}
 	
 	// Update is called once per frame

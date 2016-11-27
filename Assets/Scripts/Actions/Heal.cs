@@ -2,14 +2,16 @@
 using System.Collections;
 
 public class Heal : Action {
-
+    
 	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	protected override void Start () {
+        _thisEntity = GetComponent<Entity>();
+    }
+
+    void DoHeal()
+    {
+        _target = _thisEntity.currentTarget;
+        _target.AddCharacteristic(Entity.CharacteristicType.Life, amount);
+        _thisEntity.hasDoneAction = true;
+    }
 }
