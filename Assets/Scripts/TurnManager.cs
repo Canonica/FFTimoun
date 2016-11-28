@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class TurnManager : MonoBehaviour {
-
+    public static TurnManager instance;
     public enum TurnState
     {
         Nobody,
@@ -15,6 +15,19 @@ public class TurnManager : MonoBehaviour {
 
     public float timeBetweenTurns;
     private bool _isChangingTurn;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            DontDestroyOnLoad(this.gameObject);
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     void Start()
     {

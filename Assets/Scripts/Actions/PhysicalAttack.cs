@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Action : MonoBehaviour {
+public class PhysicalAttack : Attack {
 
-    
 	// Use this for initialization
-	void Start () {
-	
+	protected override void Start () {
+        base.Start();
+        _attackType = AttackType.Type.Physical;
 	}
 	
 	// Update is called once per frame
