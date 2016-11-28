@@ -7,6 +7,7 @@ namespace GambitSystem
     [Serializable]
     public class ICondition
     {
+
         public EntityType entityType;
         public enum EntityType
         {
@@ -52,14 +53,14 @@ namespace GambitSystem
         {
             if (parConditionTarget == ConditionTarget.Life)
             {
-                /*if (parEntityType == EntityType.Ally)
+               if (parEntityType == EntityType.Ally)
                 {
-                    return CheckOperator(parOperator, target.GetComponent<Life>().life, parValue);
+                    return CheckOperator(parOperator, CombatManager.instance.listOfEntity[0].currentLife, parValue);
                 }
                 else if (parEntityType == EntityType.Enemy)
                 {
-                    return CheckOperator(parOperator, target.GetComponent<Life>().life, parValue);
-                }*/
+                    return CheckOperator(parOperator, CombatManager.instance.listOfEntity[0].currentLife, parValue);
+                }
                 return false;
             }else if(parConditionTarget == ConditionTarget.MagicalResistance)
             {

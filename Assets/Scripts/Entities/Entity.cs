@@ -2,6 +2,11 @@
 using System.Collections;
 public class Entity : MonoBehaviour {
 
+    Entity GetEntity
+    {
+        get { return this; }
+    }
+
     public string entityName;
 
     [Header("Characteristics")]
