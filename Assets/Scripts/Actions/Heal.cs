@@ -8,7 +8,7 @@ public class Heal : Action {
         _thisEntity = GetComponent<Entity>();
     }
 
-    void DoHeal()
+    public void DoHeal()
     {
         _target = _thisEntity.currentTarget;
         _target.AddCharacteristic(Entity.CharacteristicType.Life, amount);
