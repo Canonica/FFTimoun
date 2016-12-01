@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+[RequireComponent(typeof(PhysicalAttack))]
+[RequireComponent(typeof(MagicAttack))]
+[RequireComponent(typeof(Heal))]
+
 public class Entity : MonoBehaviour {
 
     public string entityName;
@@ -24,6 +28,10 @@ public class Entity : MonoBehaviour {
 
     protected Archetype.CurrentArchetype archetype;
     protected AttackType.Type attackPreference;
+
+    public PhysicalAttack physicalAttack;
+    public MagicAttack magicalAttack;
+    public Heal heal;
 
     public enum CharacteristicType
     {
@@ -51,6 +59,9 @@ public class Entity : MonoBehaviour {
         {
             CombatManager.instance.enemyEntities.Add(this);
         }
+        physicalAttack = GetComponent<PhysicalAttack>();
+        magicalAttack = GetComponent<MagicAttack>();
+        heal = GetComponent<Heal>();
     }
 
     public void SubstractCharacteristic(CharacteristicType type, float amount)
