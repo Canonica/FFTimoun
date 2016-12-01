@@ -55,11 +55,17 @@ namespace GambitSystem
             {
                if (parEntityType == EntityType.Ally)
                 {
-                    return CheckOperator(parOperator, CombatManager.instance.listOfEntity[0].currentLife, parValue);
+                    foreach(Entity player in CombatManager.instance.playerEntities)
+                    {
+                        return CheckOperator(parOperator, player.currentLife, parValue);
+                    }
                 }
                 else if (parEntityType == EntityType.Enemy)
                 {
-                    return CheckOperator(parOperator, CombatManager.instance.listOfEntity[0].currentLife, parValue);
+                    foreach (Entity enemy in CombatManager.instance.enemyEntities)
+                    {
+                        return CheckOperator(parOperator, enemy.currentLife, parValue);
+                    }
                 }
                 return false;
             }else if(parConditionTarget == ConditionTarget.MagicalResistance)
