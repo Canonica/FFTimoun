@@ -18,7 +18,7 @@ public class Entity : MonoBehaviour {
     public float maxLife;
     public float maxMana;
 
-    [HideInInspector]
+    //[HideInInspector]
     public float currentLife;
     [HideInInspector]
     public float currentMana;
@@ -37,6 +37,7 @@ public class Entity : MonoBehaviour {
     public PhysicalAttack physicalAttack;
     public MagicAttack magicalAttack;
     public Heal heal;
+    public GambitSystem.Gambit gambit;
 
     public enum CharacteristicType
     {
@@ -67,17 +68,21 @@ public class Entity : MonoBehaviour {
         physicalAttack = GetComponent<PhysicalAttack>();
         magicalAttack = GetComponent<MagicAttack>();
         heal = GetComponent<Heal>();
+        gambit = GetComponent<GambitSystem.Gambit>();
     }
 
     public void SubstractCharacteristic(CharacteristicType type, float amount)
     {
         if(type == CharacteristicType.Life)
         {
+            Debug.Log(amount);
             currentLife -= amount;
             currentLife = Mathf.Max(0, currentLife);
             if(currentLife <= 0)
             {
+                CombatManager.instance.RemoveFromList(this);
                 Debug.Log(entityName + " is dead !");
+                
                 Destroy(this.gameObject);
             }
         }
@@ -108,14 +113,16 @@ public class Entity : MonoBehaviour {
     {
         if(type == AttackType.Type.Magic)
         {
-            amount = amount * magicalResistancePercentage / 100;
+            amount = amount - (amount * magicalResistancePercentage / 100);
             SubstractCharacteristic(CharacteristicType.Life, amount);
         }
 
         if(type == AttackType.Type.Physical)
         {
-            amount = amount * physicalResistancePercentage / 100;
+            amount = amount - (amount * physicalResistancePercentage / 100);
             SubstractCharacteristic(CharacteristicType.Life, amount);
         }
     }
+
+   
 }

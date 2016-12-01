@@ -20,15 +20,17 @@ public class CombatManager : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public void RemoveFromList(Entity entity)
+    {
+        if(entity.currentCamp == Entity.Camp.Player)
+        {
+            playerEntities.Remove(entity);
+        }
+        else if(entity.currentCamp == Entity.Camp.Enemy)
+        {
+            enemyEntities.Remove(entity);
+        }
+    }
 
 
 }

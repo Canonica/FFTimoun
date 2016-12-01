@@ -8,6 +8,8 @@ namespace GambitSystem
     public class ICondition
     {
 
+        public Entity entity;
+
         public EntityType entityType;
         public enum EntityType
         {
@@ -45,56 +47,141 @@ namespace GambitSystem
             Magical,
             Physical,
             Heal,
-            None,
+        }
+
+        public void ExecuteAction()
+        {
+            switch (action)
+            {
+                case Action.Heal:
+                    entity.heal.DoHeal();
+                    break;
+                case Action.Physical:
+                    entity.physicalAttack.DoAttack();
+                    break;
+                case Action.Magical:
+                    entity.magicalAttack.DoAttack();
+                    break;
+
+                default:
+                    break;
+            }
+
+            TurnManager.instance.CheckEndTurn(entity);
         }
         
         
-        public bool CheckCondition(EntityType parEntityType, ConditionTarget parConditionTarget, ConditionOperator parOperator, float parValue)
+        public bool CheckCondition(/*EntityType parEntityType, ConditionTarget parConditionTarget, ConditionOperator parOperator, float parValue*/)
         {
-            if (parConditionTarget == ConditionTarget.Life)
+            if (conditionTarget == ConditionTarget.Life)
             {
-               if (parEntityType == EntityType.Ally)
+               if (entityType == EntityType.Ally)
                 {
-                    foreach(Entity player in CombatManager.instance.playerEntities)
+                    if(entity.currentCamp == Entity.Camp.Player)
                     {
-                        return CheckOperator(parOperator, player.currentLife, parValue);
-                    }
-                }
-                else if (parEntityType == EntityType.Enemy)
-                {
-                    foreach (Entity enemy in CombatManager.instance.enemyEntities)
+                        foreach (Entity player in CombatManager.instance.playerEntities)
+                        {
+                            entity.currentTarget = player;
+                            return CheckOperator(conditionOperator, player.currentLife, value);
+                        }
+                    }else
                     {
-                        return CheckOperator(parOperator, enemy.currentLife, parValue);
+                        foreach (Entity enemy in CombatManager.instance.enemyEntities)
+                        {
+                            entity.currentTarget = enemy;
+                            return CheckOperator(conditionOperator, enemy.currentLife, value);
+                        }
                     }
+                    
                 }
                 return false;
-            }else if(parConditionTarget == ConditionTarget.MagicalResistance)
+            }else if(conditionTarget == ConditionTarget.MagicalResistance)
             {
+                
+                if (entityType == EntityType.Enemy)
+                {
+                    if(entity.currentCamp == Entity.Camp.Player)
+                    {
+                        Entity betterTarget = CombatManager.instance.enemyEntities[0];
+                        for(int i= 0; i < CombatManager.instance.enemyEntities.Count; i++)
+                        {
+                            if(CombatManager.instance.enemyEntities[i].magicalResistancePercentage < betterTarget.magicalResistancePercentage)
+                            {
+                                betterTarget = CombatManager.instance.enemyEntities[i];
+                            }
+                        }
+
+                        entity.currentTarget = betterTarget;
+                        return true;
+                    }else
+                    {
+                        Entity betterTarget = CombatManager.instance.playerEntities[0];
+                        for (int i = 0; i < CombatManager.instance.playerEntities.Count; i++)
+                        {
+                            if (CombatManager.instance.playerEntities[i].magicalResistancePercentage < betterTarget.magicalResistancePercentage)
+                            {
+                                betterTarget = CombatManager.instance.playerEntities[i];
+                            }
+                        }
+
+                        entity.currentTarget = betterTarget;
+                        return true;
+                        /*foreach (Entity player in CombatManager.instance.playerEntities)
+                        {
+                            entity.currentTarget = player;
+                            return CheckOperator(ConditionOperator.UnderOrEqual, player.physicalResistancePercentage, player.magicalResistancePercentage);
+                        }*/
+                    }
+                    
+                }
                 return false;
             }
-            else if (parConditionTarget == ConditionTarget.PhysicalResistance)
+            else if (conditionTarget == ConditionTarget.PhysicalResistance)
             {
-                return false;
-            }
-            else if (parConditionTarget == ConditionTarget.Stamina)
-            {
-                /*if (parEntityType == EntityType.Ally)
+                if (entity.currentCamp == Entity.Camp.Player)
+                {
+                    Entity betterTarget = CombatManager.instance.enemyEntities[0];
+                    for (int i = 0; i < CombatManager.instance.enemyEntities.Count; i++)
                     {
-                        return CheckOperator(parOperator, target.GetComponent<Stamina>().stamina, parValue);
+                        if (CombatManager.instance.enemyEntities[i].physicalResistancePercentage < betterTarget.physicalResistancePercentage)
+                        {
+                            betterTarget = CombatManager.instance.enemyEntities[i];
+                        }
                     }
-                    else if (parEntityType == EntityType.Enemy)
+
+                    entity.currentTarget = betterTarget;
+                    return true;
+                }
+                else
+                {
+                    Entity betterTarget = CombatManager.instance.playerEntities[0];
+                    for (int i = 0; i < CombatManager.instance.playerEntities.Count; i++)
                     {
-                        return CheckOperator(parOperator, target.GetComponent<Stamina>().stamina, parValue);
+                        if (CombatManager.instance.playerEntities[i].physicalResistancePercentage < betterTarget.physicalResistancePercentage)
+                        {
+                            betterTarget = CombatManager.instance.playerEntities[i];
+                        }
+                    }
+
+                    entity.currentTarget = betterTarget;
+                    return true;
+                    /*foreach (Entity player in CombatManager.instance.playerEntities)
+                    {
+                        entity.currentTarget = player;
+                        return CheckOperator(ConditionOperator.UnderOrEqual, player.physicalResistancePercentage, player.magicalResistancePercentage);
                     }*/
+                }
                 return false;
             }
-            else if (parConditionTarget == ConditionTarget.None)
+            else if (conditionTarget == ConditionTarget.None)
             {
-                return false;
+                return true;
             }
 
             return false;
         }
+
+
 
         bool CheckOperator(ConditionOperator parOperator, float parValue1, float parValue2)
         {

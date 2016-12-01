@@ -9,6 +9,20 @@ namespace GambitSystem
     {
         public ICondition[] arrayOfConditions;
 
+        public void CheckAllCondition()
+        {
+
+            for(int i=0; i < arrayOfConditions.Length; i++)
+            {
+                arrayOfConditions[i].entity = GetComponent<Entity>();
+                if (arrayOfConditions[i].CheckCondition())
+                {
+                    arrayOfConditions[i].ExecuteAction();
+                    break;
+                }
+            }
+        }
+
         /*[Serializable]
         public struct IInputContext
         {

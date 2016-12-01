@@ -16,6 +16,7 @@ public class Attack : Action {
     public void DoAttack()
     {
         _target = _thisEntity.currentTarget;
+        amount = amount + Random.Range(-5, 5);
         _target.ReceiveDamage(_attackType, amount);
         _thisEntity.hasDoneAction = true;
     }
