@@ -7,9 +7,10 @@ namespace GambitSystem
     [Serializable]
     public class ICondition
     {
-
+        [HideInInspector]
         public Entity entity;
 
+        [Header("Base settings")]
         public EntityType entityType;
         public enum EntityType
         {
@@ -27,7 +28,8 @@ namespace GambitSystem
             Stamina,
             None,
         }
-        
+
+        [Header("Only with heal")]
         public ConditionOperator conditionOperator;
         public enum ConditionOperator
         {
@@ -41,6 +43,8 @@ namespace GambitSystem
 
         public float value;
 
+
+        [Header("Action to do")]
         public Action action;
         public enum Action
         {
@@ -82,14 +86,14 @@ namespace GambitSystem
                         foreach (Entity player in CombatManager.instance.playerEntities)
                         {
                             entity.currentTarget = player;
-                            return CheckOperator(conditionOperator, player.currentLife, value);
+                            return CheckOperator(conditionOperator, player.currentLife, (value* player.maxLife /100f));
                         }
                     }else
                     {
                         foreach (Entity enemy in CombatManager.instance.enemyEntities)
                         {
                             entity.currentTarget = enemy;
-                            return CheckOperator(conditionOperator, enemy.currentLife, value);
+                            return CheckOperator(conditionOperator, enemy.currentLife, (value * enemy.maxLife / 100f));
                         }
                     }
                     

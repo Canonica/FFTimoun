@@ -95,14 +95,13 @@ public class TurnManager : MonoBehaviour {
     {
         if(entity.currentCamp == Entity.Camp.Player)
         {
-            Debug.Log(CombatManager.instance.playerEntities.TrueForAll(en => en.hasDoneAction));
             if(CombatManager.instance.playerEntities.TrueForAll(en => en.hasDoneAction))
             {
                 StartCoroutine(WaitBetweenTurns(1f));
             }
         }else if (entity.currentCamp == Entity.Camp.Enemy)
         {
-            Debug.Log(CombatManager.instance.enemyEntities.TrueForAll(en => en.hasDoneAction));
+
             if (CombatManager.instance.enemyEntities.TrueForAll(en => en.hasDoneAction))
             {
                 StartCoroutine(WaitBetweenTurns(1f));
@@ -115,26 +114,25 @@ public class TurnManager : MonoBehaviour {
     {
         if(currentTurnState == TurnState.PlayerTurn)
         {
-            foreach (Entity entity in CombatManager.instance.playerEntities)
+            for(int i = 0; i < CombatManager.instance.playerEntities.Count; i++)
             {
-                StartCoroutine("ExecuteWithDelay", entity);
+                StartCoroutine(ExecuteWithDelay( CombatManager.instance.playerEntities[i], i+1f));
             }
 
         }
         else if(currentTurnState == TurnState.EnemyTurn)
         {
-            foreach (Entity entity in CombatManager.instance.enemyEntities)
+            for (int i = 0; i < CombatManager.instance.enemyEntities.Count; i++)
             {
-                StartCoroutine("ExecuteWithDelay", entity);
+                StartCoroutine(ExecuteWithDelay(CombatManager.instance.enemyEntities[i], i+1f));
             }
         }
     }
 
-    IEnumerator ExecuteWithDelay(Entity entity)
+    IEnumerator ExecuteWithDelay(Entity entity, float time)
     {
         
-        yield return new WaitForSeconds(1f);
-        Debug.Log(entity.gambit);
+        yield return new WaitForSeconds(time);
         entity.gambit.CheckAllCondition();
     }
 }

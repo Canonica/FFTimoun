@@ -75,7 +75,6 @@ public class Entity : MonoBehaviour {
     {
         if(type == CharacteristicType.Life)
         {
-            Debug.Log(amount);
             currentLife -= amount;
             currentLife = Mathf.Max(0, currentLife);
             if(currentLife <= 0)
